@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>保険なし老後メーター — 老後いくら必要？正直に教えます。</title>
+<meta name="description" content="FPに相談したら保険を勧められた。もう結構。保険を売らない、中立な老後資金シミュレーターです。登録不要・完全無料。">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif; background: #f8f5f0; color: #2C2C2A; line-height: 1.7; }
+.container { max-width: 680px; margin: 0 auto; padding: 1.5rem 1rem; }
+
+.hero { background: #A32D2D; border-radius: 16px; padding: 2rem 1.5rem; position: relative; overflow: hidden; margin-bottom: 1.5rem; }
+.hero-circle1 { position: absolute; top: -30px; left: -30px; width: 120px; height: 120px; background: #791F1F; border-radius: 50%; }
+.hero-circle2 { position: absolute; top: 10px; left: 60px; width: 40px; height: 40px; background: #791F1F; border-radius: 50%; }
+.hero-circle3 { position: absolute; bottom: -20px; right: -20px; width: 100px; height: 100px; background: #791F1F; border-radius: 50%; }
+.hero-dot1 { position: absolute; bottom: 20px; right: 70px; width: 20px; height: 20px; background: #fff; border-radius: 50%; opacity: 0.2; }
+.hero-dot2 { position: absolute; top: 20px; right: 20px; width: 14px; height: 14px; background: #fff; border-radius: 50%; opacity: 0.2; }
+.hero-content { position: relative; z-index: 1; }
+.hero-badge { display: inline-block; background: #fff; border: 2.5px solid #A32D2D; border-radius: 24px; padding: 4px 16px; margin-bottom: 1rem; font-size: 13px; font-weight: 700; color: #A32D2D; }
+.hero-title { font-size: 28px; font-weight: 700; color: #fff; line-height: 1.4; margin-bottom: 0.5rem; }
+.hero-sub { font-size: 16px; color: #F09595; margin-bottom: 1.25rem; }
+.hero-stats { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.hero-stat { text-align: center; }
+.hero-stat-label { font-size: 11px; color: #F09595; margin-bottom: 2px; }
+.hero-stat-num { font-size: 26px; font-weight: 700; color: #fff; line-height: 1; }
+.hero-stat-sub { font-size: 11px; color: #F09595; }
+.hero-divider { width: 1px; height: 40px; background: #791F1F; margin: 0 0.75rem; }
+.hero-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn-primary { background: #fff; color: #A32D2D; border: none; border-radius: 24px; padding: 12px 22px; font-size: 14px; font-weight: 700; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+.btn-outline { background: transparent; color: #fff; border: 2px solid #fff; border-radius: 24px; padding: 12px 22px; font-size: 14px; font-weight: 700; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+
+.divider { border: none; border-top: 2px solid #A32D2D; margin: 1.5rem 0; }
+
+.sim-section { background: #fff; border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; border: 0.5px solid #e0d8d0; }
+.sim-title { font-size: 15px; font-weight: 700; text-align: center; color: #A32D2D; margin-bottom: 1.25rem; }
+.slider-group { margin-bottom: 1rem; }
+.slider-row { display: flex; justify-content: space-between; margin-bottom: 4px; }
+.slider-label { font-size: 13px; color: #5F5E5A; }
+.slider-val { font-size: 13px; font-weight: 700; }
+input[type=range] { width: 100%; accent-color: #A32D2D; }
+
+.status-card { border-radius: 10px; padding: 1rem 1.25rem; margin: 1.25rem 0; text-align: center; }
+.status-label { font-size: 11px; margin: 0 0 4px; opacity: 0.8; }
+.status-text { font-size: 20px; font-weight: 700; margin: 0; }
+
+.result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
+.result-card { background: #f8f5f0; border-radius: 10px; padding: 0.875rem; }
+.result-card-label { font-size: 11px; color: #888780; margin: 0 0 3px; }
+.result-card-num { font-size: 17px; font-weight: 700; margin: 0; }
+
+.advice-box { background: #FCEBEB; border: 0.5px solid #F7C1C1; border-radius: 10px; padding: 0.875rem 1rem; margin-bottom: 1.5rem; font-size: 13px; color: #501313; line-height: 1.6; }
+
+.chart-wrap { margin-bottom: 0.5rem; }
+
+.promise-section { background: #fff; border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; border: 0.5px solid #e0d8d0; }
+.promise-title { font-size: 15px; font-weight: 700; text-align: center; color: #A32D2D; margin-bottom: 1rem; }
+.promise-item { display: flex; align-items: flex-start; gap: 10px; padding: 0.875rem; background: #FCEBEB; border-radius: 10px; border: 0.5px solid #F7C1C1; margin-bottom: 8px; }
+.promise-icon { font-size: 20px; color: #A32D2D; flex-shrink: 0; margin-top: 1px; }
+.promise-item-title { font-size: 13px; font-weight: 700; margin: 0 0 2px; color: #501313; }
+.promise-item-sub { font-size: 12px; color: #791F1F; margin: 0; }
+
+footer { text-align: center; padding: 1rem 0 2rem; font-size: 12px; color: #888780; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="hero">
+  <div class="hero-circle1"></div>
+  <div class="hero-circle2"></div>
+  <div class="hero-circle3"></div>
+  <div class="hero-dot1"></div>
+  <div class="hero-dot2"></div>
+  <div class="hero-content">
+    <div class="hero-badge">保険勧誘ゼロ・完全無料</div>
+    <h1 class="hero-title">老後のお金、<br>正直に言います。</h1>
+    <p class="hero-sub">保険は売りません。数字だけ見てください。</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-label">料金</div>
+        <div class="hero-stat-num">0円</div>
+        <div class="hero-stat-sub">完全無料</div>
+      </div>
+      <div class="hero-divider"></div>
+      <div class="hero-stat">
+        <div class="hero-stat-label">登録</div>
+        <div class="hero-stat-num">不要</div>
+        <div class="hero-stat-sub">すぐ使える</div>
+      </div>
+      <div class="hero-divider"></div>
+      <div class="hero-stat">
+        <div class="hero-stat-label">保険勧誘</div>
+        <div class="hero-stat-num">ゼロ</div>
+        <div class="hero-stat-sub">忖度なし</div>
+      </div>
+    </div>
+    <div class="hero-btns">
+      <a href="#simulator" class="btn-primary">今すぐシミュレーション</a>
+      <a href="#promise" class="btn-outline">サービスについて</a>
+    </div>
+  </div>
+</div>
+
+<div class="sim-section" id="simulator">
+  <p class="sim-title">老後資金シミュレーター</p>
+
+  <div class="slider-group">
+    <div class="slider-row"><label class="slider-label">現在の年齢</label><span class="slider-val" id="age-out">35歳</span></div>
+    <input type="range" min="20" max="65" value="35" step="1" id="age">
+  </div>
+  <div class="slider-group">
+    <div class="slider-row"><label class="slider-label">退職予定年齢</label><span class="slider-val" id="retire-out">65歳</span></div>
+    <input type="range" min="50" max="75" value="65" step="1" id="retire">
+  </div>
+  <div class="slider-group">
+    <div class="slider-row"><label class="slider-label">現在の貯蓄額</label><span class="slider-val" id="savings-out">100万円</span></div>
+    <input type="range" min="0" max="5000" value="100" step="50" id="savings">
+  </div>
+  <div class="slider-group">
+    <div class="slider-row"><label class="slider-label">毎月の積立額</label><span class="slider-val" id="monthly-out">5万円</span></div>
+    <input type="range" min="0" max="50" value="5" step="1" id="monthly">
+  </div>
+  <div class="slider-group">
+    <div class="slider-row"><label class="slider-label">老後の月々の生活費</label><span class="slider-val" id="living-out">20万円</span></div>
+    <input type="range" min="10" max="50" value="20" step="1" id="living">
+  </div>
+  <div class="slider-group">
+    <div class="slider-row"><label class="slider-label">年金受給額（月）</label><span class="slider-val" id="pension-out">10万円</span></div>
+    <input type="range" min="0" max="30" value="10" step="1" id="pension">
+  </div>
+  <div class="slider-group">
+    <div class="slider-row"><label class="slider-label">想定寿命</label><span class="slider-val" id="life-out">90歳</span></div>
+    <input type="range" min="75" max="105" value="90" step="1" id="life">
+  </div>
+
+  <div class="status-card" id="status-card">
+    <p class="status-label" id="status-label">判定</p>
+    <p class="status-text" id="status-text"></p>
+  </div>
+
+  <div class="result-grid">
+    <div class="result-card"><p class="result-card-label">老後に必要な総額</p><p class="result-card-num" id="need-total"></p></div>
+    <div class="result-card"><p class="result-card-label">退職時の貯蓄額</p><p class="result-card-num" id="at-retire"></p></div>
+    <div class="result-card"><p class="result-card-label">不足 / 余剰</p><p class="result-card-num" id="gap"></p></div>
+    <div class="result-card"><p class="result-card-label">毎月あと必要な積立</p><p class="result-card-num" id="extra"></p></div>
+  </div>
+
+  <div class="advice-box" id="advice"></div>
+  <div class="chart-wrap"><canvas id="chart" height="160"></canvas></div>
+</div>
+
+<div class="promise-section" id="promise">
+  <p class="promise-title">このサービスの約束</p>
+  <div class="promise-item">
+    <span class="promise-icon">🛡️</span>
+    <div>
+      <p class="promise-item-title">保険商品は一切勧めません。</p>
+      <p class="promise-item-sub">数字だけをお見せします。それ以上でも以下でもありません。</p>
+    </div>
+  </div>
+  <div class="promise-item">
+    <span class="promise-icon">🔒</span>
+    <div>
+      <p class="promise-item-title">登録不要。個人情報も不要。</p>
+      <p class="promise-item-sub">入力した数字はブラウザの中だけ。どこにも送りません。</p>
+    </div>
+  </div>
+  <div class="promise-item">
+    <span class="promise-icon">⚖️</span>
+    <div>
+      <p class="promise-item-title">スポンサーなし。忖度なし。</p>
+      <p class="promise-item-sub">保険会社とは一切無関係です。中立な数字だけをお届けします。</p>
+    </div>
+  </div>
+</div>
+
+<footer>保険なし老後メーター © 2026</footer>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+let ch;
+function fmt(v) {
+  v = Math.round(v);
+  if (Math.abs(v) >= 10000) return (Math.round(v/1000)/10) + '億円';
+  return v + '万円';
+}
+function go() {
+  const age = +document.getElementById('age').value;
+  const retire = +document.getElementById('retire').value;
+  const savings = +document.getElementById('savings').value;
+  const monthly = +document.getElementById('monthly').value;
+  const living = +document.getElementById('living').value;
+  const pension = +document.getElementById('pension').value;
+  const life = +document.getElementById('life').value;
+
+  document.getElementById('age-out').textContent = age + '歳';
+  document.getElementById('retire-out').textContent = retire + '歳';
+  document.getElementById('savings-out').textContent = savings + '万円';
+  document.getElementById('monthly-out').textContent = monthly + '万円';
+  document.getElementById('living-out').textContent = living + '万円';
+  document.getElementById('pension-out').textContent = pension + '万円';
+  document.getElementById('life-out').textContent = life + '歳';
+
+  const ytr = Math.max(0, retire - age);
+  const ryr = Math.max(0, life - retire);
+  const atRetire = savings + monthly * 12 * ytr;
+  const needPerMonth = Math.max(0, living - pension);
+  const needTotal = needPerMonth * 12 * ryr;
+  const gap = atRetire - needTotal;
+  const extra = ytr > 0 && gap < 0 ? Math.ceil(Math.abs(gap) / 12 / ytr) : 0;
+
+  document.getElementById('need-total').textContent = fmt(needTotal);
+  document.getElementById('at-retire').textContent = fmt(atRetire);
+
+  const gapEl = document.getElementById('gap');
+  gapEl.textContent = (gap >= 0 ? '+' : '-') + fmt(Math.abs(gap));
+  gapEl.style.color = gap >= 0 ? '#1D9E75' : '#A32D2D';
+  document.getElementById('extra').textContent = extra > 0 ? '+' + extra + '万円/月' : '不要';
+
+  const sc = document.getElementById('status-card');
+  const st = document.getElementById('status-text');
+  const sl = document.getElementById('status-label');
+  if (gap >= 0) {
+    sc.style.background = '#EAF3DE';
+    sc.style.border = '0.5px solid #97C459';
+    st.style.color = '#3B6D11';
+    sl.style.color = '#3B6D11';
+    st.textContent = '安心です。現在のペースで老後資金は足ります。';
+    document.getElementById('advice').textContent = '余剰分はNISAやiDeCoで運用するとさらに安心です。保険商品の勧誘は一切ありません。';
+  } else {
+    sc.style.background = '#FCEBEB';
+    sc.style.border = '0.5px solid #F7C1C1';
+    st.style.color = '#A32D2D';
+    sl.style.color = '#A32D2D';
+    st.textContent = '危険です。このままでは老後資金が尽きます。';
+    document.getElementById('advice').textContent = extra > 0
+      ? '毎月あと' + extra + '万円の積立が必要です。iDeCoやNISAの活用を検討してください。保険商品の勧誘は一切ありません。'
+      : '退職まで時間がありません。生活費の見直しや退職後の収入源を今すぐ考えてください。';
+  }
+
+  const labels = [], data = [];
+  let bal = savings;
+  for (let a = age; a <= life; a++) {
+    labels.push(a + '歳');
+    bal += a < retire ? monthly * 12 : -needPerMonth * 12;
+    data.push(Math.round(bal));
+  }
+
+  if (ch) ch.destroy();
+  const ctx = document.getElementById('chart').getContext('2d');
+  ch = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        data,
+        borderColor: gap >= 0 ? '#1D9E75' : '#A32D2D',
+        backgroundColor: gap >= 0 ? 'rgba(29,158,117,0.08)' : 'rgba(163,45,45,0.08)',
+        fill: true, tension: 0.3, pointRadius: 0, borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { font: { size: 10 }, maxTicksLimit: 8, color: '#888' }, grid: { color: 'rgba(128,128,128,0.1)' } },
+        y: { ticks: { font: { size: 10 }, color: '#888', callback: v => Math.round(v/100)/10 + '千万' }, grid: { color: 'rgba(128,128,128,0.1)' } }
+      }
+    }
+  });
+}
+document.querySelectorAll('input[type=range]').forEach(el => el.addEventListener('input', go));
+go();
+</script>
+</body>
+</html>
