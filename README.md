@@ -1,0 +1,1 @@
+# hoken-nashi-rogo-meter
